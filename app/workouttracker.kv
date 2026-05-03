@@ -1,0 +1,476 @@
+<WorkoutRow@BoxLayout>:
+    workout_text: ''
+    workout_id: 0
+    workout_done: False
+    workout_button_text: 'Done'
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(52)
+    padding: dp(10)
+    spacing: dp(10)
+    canvas.before:
+        Color:
+            rgba: (0.12, 0.12, 0.12, 1) if root.workout_done else (0.08, 0.08, 0.08, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        text: root.workout_text
+        color: (0.6, 0.6, 0.6, 1) if root.workout_done else (1, 1, 1, 1)
+        text_size: self.width, None
+        halign: 'left'
+        valign: 'middle'
+
+    BoxLayout:
+        size_hint_x: None
+        width: dp(180)
+        spacing: dp(8)
+
+        Button:
+            text: root.workout_button_text
+            on_release: app.root.toggle_workout_complete(root.workout_id)
+
+        Button:
+            text: 'Delete'
+            on_release: app.root.delete_workout(root.workout_id)
+
+<NewExerciseModal@ModalView>:
+    size_hint: 0.85, 0.55
+    auto_dismiss: False
+    background_color: 0, 0, 0, 0.55
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(16)
+
+        canvas.before:
+            Color:
+                rgba: 0.16, 0.16, 0.16, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [18]
+
+        Label:
+            text: 'Add New Exercise'
+            size_hint_y: None
+            height: dp(36)
+            font_size: '20sp'
+            bold: True
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+
+        GridLayout:
+            cols: 2
+            row_force_default: True
+            row_default_height: dp(44)
+            spacing: dp(12)
+            size_hint_y: None
+            height: self.minimum_height
+
+            Label:
+                text: 'Name:'
+                size_hint_x: None
+                width: dp(90)
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+            TextInput:
+                id: new_exercise_name
+                text: app.root.new_exercise_name
+                multiline: False
+                on_text: app.root.new_exercise_name = self.text
+
+            Label:
+                text: 'Category:'
+                size_hint_x: None
+                width: dp(90)
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+            Spinner:
+                id: new_exercise_category
+                text: app.root.new_exercise_category
+                values: app.root.exercise_categories
+                on_text: app.root.new_exercise_category = self.text
+
+            Label:
+                text: 'Type:'
+                size_hint_x: None
+                width: dp(90)
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+            Spinner:
+                id: new_exercise_type
+                text: app.root.new_exercise_type
+                values: ['strength', 'timer']
+                on_text: app.root.on_exercise_type(self.text)
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(46)
+            spacing: dp(12)
+
+            Button:
+                text: 'Save'
+                on_release: app.root.save_new_exercise()
+
+            Button:
+                text: 'Cancel'
+                on_release: root.dismiss()
+
+<ArchiveRow@BoxLayout>:
+    session_id: ''
+    session_label: ''
+    is_selected: False
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(50)
+    spacing: dp(10)
+    padding: dp(8)
+    canvas.before:
+        Color:
+            rgba: (0.16, 0.42, 0.7, 0.25) if root.is_selected else (0.12, 0.12, 0.12, 1)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10]
+
+    Label:
+        text: root.session_label + (' [selected]' if root.is_selected else '')
+        text_size: self.width, None
+        valign: 'middle'
+        halign: 'left'
+
+    Button:
+        text: 'Select'
+        size_hint_x: None
+        width: dp(90)
+        on_release: app.root.select_archive(root.session_id)
+
+<ArchiveDetailRow@BoxLayout>:
+    detail_text: ''
+    orientation: 'horizontal'
+    size_hint_y: None
+    height: dp(48)
+    padding: dp(8)
+
+    Label:
+        text: root.detail_text
+        text_size: self.width, None
+        valign: 'middle'
+        halign: 'left'
+
+<ArchiveModal@ModalView>:
+    size_hint: 0.9, 0.75
+    auto_dismiss: False
+    background_color: 0, 0, 0, 0.55
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(14)
+
+        Label:
+            text: 'Archived sessions'
+            size_hint_y: None
+            height: dp(34)
+            font_size: '18sp'
+            bold: True
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+
+        BoxLayout:
+            spacing: dp(14)
+
+            RecycleView:
+                id: archive_list
+                viewclass: 'ArchiveRow'
+                size_hint_x: 0.55
+                scroll_type: ['bars', 'content']
+                bar_width: dp(10)
+
+                RecycleBoxLayout:
+                    default_size: None, dp(70)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    spacing: dp(10)
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.45
+                spacing: dp(12)
+
+                Label:
+                    id: selected_archive_label
+                    text: 'Select a session to view details'
+                    size_hint_y: None
+                    height: dp(28)
+                    font_size: '15sp'
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+
+                RecycleView:
+                    id: archive_details
+                    viewclass: 'ArchiveDetailRow'
+                    scroll_type: ['bars', 'content']
+                    bar_width: dp(10)
+
+                    RecycleBoxLayout:
+                        default_size: None, dp(48)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        orientation: 'vertical'
+                        spacing: dp(6)
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(44)
+            spacing: dp(12)
+
+            Button:
+                text: 'Restore selected'
+                on_release: root.dismiss(); app.root.restore_archive(app.root.selected_archive_id)
+
+            Button:
+                text: 'Delete selected'
+                on_release: app.root.confirm_delete_archive(app.root.selected_archive_id)
+
+            Button:
+                text: 'Close'
+                on_release: root.dismiss()
+
+<DeleteConfirmModal@ModalView>:
+    size_hint: 0.65, 0.32
+    auto_dismiss: False
+    background_color: 0, 0, 0, 0.55
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(16)
+        spacing: dp(16)
+
+        Label:
+            id: confirm_text
+            text: 'Confirm delete?'
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(44)
+            spacing: dp(12)
+
+            Button:
+                text: 'Yes, delete'
+                on_release: app.root.delete_archive()
+
+            Button:
+                text: 'Cancel'
+                on_release: root.dismiss()
+
+<WorkoutTracker>:
+    orientation: 'vertical'
+    padding: dp(18)
+    spacing: dp(18)
+
+    Label:
+        text: 'My Workout Tracker'
+        size_hint_y: None
+        height: dp(52)
+        font_size: '24sp'
+        bold: True
+        halign: 'center'
+        valign: 'middle'
+        text_size: self.size
+
+    BoxLayout:
+        spacing: dp(18)
+        size_hint_y: None
+        height: dp(380)
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.42
+            padding: dp(18)
+            spacing: dp(18)
+            canvas.before:
+                Color:
+                    rgba: 0.12, 0.12, 0.12, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [14]
+
+            Label:
+                text: 'Add workout'
+                size_hint_y: None
+                height: dp(32)
+                font_size: '18sp'
+                bold: True
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+
+            GridLayout:
+                cols: 2
+                row_force_default: True
+                row_default_height: dp(44)
+                spacing: dp(12)
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    text: 'Category:'
+                    size_hint_x: None
+                    width: dp(90)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                Spinner:
+                    id: category_spinner
+                    text: root.category_selected
+                    values: root.exercise_categories
+                    on_text: root.on_category_selected(self.text)
+
+                Label:
+                    text: 'Exercise:'
+                    size_hint_x: None
+                    width: dp(90)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                Spinner:
+                    id: exercise_spinner
+                    text: root.exercise_selected
+                    values: root.exercise_options
+                    on_text: root.on_exercise_selected(self.text)
+
+                Label:
+                    text: 'Reps:'
+                    size_hint_x: None
+                    width: dp(90)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                TextInput:
+                    id: reps_input
+                    text: root.reps_input
+                    multiline: False
+                    input_filter: 'int'
+                    disabled: root.exercise_type != 'strength'
+                    on_text: root.reps_input = self.text
+
+                Label:
+                    text: 'Sets:'
+                    size_hint_x: None
+                    width: dp(90)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                TextInput:
+                    id: sets_input
+                    text: root.sets_input
+                    multiline: False
+                    input_filter: 'int'
+                    disabled: root.exercise_type != 'strength'
+                    on_text: root.sets_input = self.text
+
+                Label:
+                    text: 'Duration:'
+                    size_hint_x: None
+                    width: dp(90)
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+                TextInput:
+                    id: duration_input
+                    text: root.duration_input
+                    multiline: False
+                    input_filter: 'int'
+                    disabled: root.exercise_type != 'timer'
+                    on_text: root.duration_input = self.text
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(46)
+                spacing: dp(12)
+
+                Button:
+                    text: 'New exercise'
+                    size_hint_x: 0.33
+                    on_release: root.open_new_exercise_popup()
+
+                Button:
+                    text: 'Save workout'
+                    size_hint_x: 0.33
+                    on_release: root.add_workout()
+
+                Button:
+                    text: 'End session'
+                    size_hint_x: 0.34
+                    on_release: root.end_session()
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.58
+            padding: dp(18)
+            spacing: dp(18)
+            canvas.before:
+                Color:
+                    rgba: 0.12, 0.12, 0.12, 1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [14]
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(32)
+                spacing: dp(12)
+
+                Label:
+                    text: 'Workout history'
+                    font_size: '18sp'
+                    bold: True
+                    halign: 'left'
+                    valign: 'middle'
+                    text_size: self.size
+
+                Button:
+                    text: 'Archives'
+                    size_hint_x: None
+                    width: dp(100)
+                    on_release: root.open_archive_popup()
+
+            RecycleView:
+                id: workout_list
+                viewclass: 'WorkoutRow'
+                scroll_type: ['bars', 'content']
+                bar_width: dp(10)
+
+                RecycleBoxLayout:
+                    default_size: None, dp(64)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    spacing: dp(10)
+
+    Label:
+        text: root.status_message
+        size_hint_y: None
+        height: dp(24)
+        halign: 'left'
+        valign: 'middle'
+        text_size: self.size
