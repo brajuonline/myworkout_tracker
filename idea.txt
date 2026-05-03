@@ -1,0 +1,34 @@
+Build a simple mobile-only app called "MyWorkoutTracker" using Python and Kivy. The app stores all data locally on the device and does not require any backend or network connection.
+
+1. Main Screen:
+   - Show a list of logged workouts with date/time and exercise details.
+   - Add a simple button to create a new workout entry.
+   - Allow deleting old workouts from the list.
+
+2. Add Workout Form:
+   - Provide a dropdown or radio buttons to select an exercise from a small predefined list (push-ups, squats, plank).
+   - Allow adding a custom exercise name and type when needed.
+   - If the exercise is strength-based: show inputs for reps and sets.
+   - If the exercise is timed: show an input for duration in seconds.
+   - Save button stores the workout locally.
+
+3. Local Storage:
+   - Use a simple local storage method on the device, such as a JSON file or SQLite database.
+   - Keep the model minimal: workouts should include id, exercise name, type, reps, sets, duration, and timestamp.
+   - If custom exercises are supported, store them locally too.
+
+4. UI:
+   - Keep the design clean and minimal with Kivy widgets.
+   - Use a Kivy RecycleView or ListView for showing workouts.
+   - Use TextInput and Spinner for the form.
+
+5. Deployment:
+   - Target Android first using Kivy and Buildozer / Plyer.
+   - Keep iOS support optional because packaging for iOS is more complex.
+
+6. Simplification suggestions:
+   - Combine history and home into one main screen to reduce navigation.
+   - Prefer JSON file storage for the simplest implementation, or SQLite only if you want structured queries.
+   - Remove advanced filters if you want a simpler app; show all workouts by default and add filter later if needed.
+
+tech stack: python, kivy
