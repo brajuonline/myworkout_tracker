@@ -34,18 +34,19 @@ jobs:
 
       - name: Install Android SDK command-line tools
         run: |
-          mkdir -p $HOME/android-sdk
+          mkdir -p $HOME/android-sdk/cmdline-tools/latest
           cd $HOME/android-sdk
           wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          unzip commandlinetools-linux-11076708_latest.zip -d cmdline-tools
+          unzip commandlinetools-linux-11076708_latest.zip -d cmdline-tools/latest
           export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$ANDROID_HOME/cmdline-tools/bin:$PATH
-          yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-34" "build-tools;37.0.0"
 
       - name: Build APK
         run: |
           export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$ANDROID_HOME/cmdline-tools/bin:$PATH
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
           buildozer android debug
 
       - name: Upload APK artifact
