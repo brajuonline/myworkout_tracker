@@ -1,0 +1,52 @@
+[app]
+# (str) Title of your application
+title = My Workout Tracker
+
+# (str) Package name
+package.name = myworkouttracker
+
+# (str) Package domain (reverse domain name)
+package.domain = org.basavaraju
+
+# (str) Source code where the main.py live
+source.dir = .
+
+# (str) List of inclusions using pattern match
+source.include_exts = py,kv,json,png,jpg
+
+# (str) Application versioning (method 1)
+version = 0.1
+
+# (list) Application requirements
+requirements = python3,kivy
+
+# (str) Supported orientation (portrait / landscape)
+orientation = portrait
+
+# (list) Permissions
+# android.permissions = INTERNET
+
+# (str) Android entry point, default is main.py
+# If your app entry file is named differently, uncomment and update below
+# entrypoint = main.py
+
+# (list) Supported Android architectures
+android.arch = armeabi-v7a, arm64-v8a
+
+# (int) Android API to use
+android.api = 33
+
+# (int) Minimum Android API supported
+android.minapi = 21
+
+# (str) Application package data includes
+# Uncomment if you have icons or presplash files
+icon.filename = %(source.dir)s/icon.png
+presplash.filename = %(source.dir)s/presplash.png
+
+[buildozer]
+# (int) Log level (0 = error only, 1 = normal, 2 = debug)
+log_level = 2
+
+# (str) Path for the build output
+# build_dir = .buildozer

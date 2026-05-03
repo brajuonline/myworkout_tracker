@@ -1,52 +1,53 @@
 [app]
-# (str) Title of your application
+# Title of your application
 title = My Workout Tracker
 
-# (str) Package name
+# Package name
 package.name = myworkouttracker
 
-# (str) Package domain (reverse domain name)
+# Package domain
 package.domain = org.basavaraju
 
-# (str) Source code where the main.py live
+# Source code directory
 source.dir = .
 
-# (str) List of inclusions using pattern match
+# File types to include
 source.include_exts = py,kv,json,png,jpg
 
-# (str) Application versioning (method 1)
+# Application version
 version = 0.1
 
-# (list) Application requirements
-requirements = python3,kivy
+# Application requirements (add any extra modules you use)
+requirements = python3,kivy,requests,sqlite3
 
-# (str) Supported orientation (portrait / landscape)
+# Orientation
 orientation = portrait
 
-# (list) Permissions
+# Permissions (uncomment if needed)
 # android.permissions = INTERNET
 
-# (str) Android entry point, default is main.py
-# If your app entry file is named differently, uncomment and update below
+# Entry point (default is main.py)
 # entrypoint = main.py
 
-# (list) Supported Android architectures
-android.arch = armeabi-v7a, arm64-v8a
+# Supported Android architectures (plural form!)
+android.archs = arm64-v8a, armeabi-v7a
 
-# (int) Android API to use
+# Target Android API
 android.api = 33
 
-# (int) Minimum Android API supported
+# Minimum supported API
 android.minapi = 21
 
-# (str) Application package data includes
-# Uncomment if you have icons or presplash files
+# NDK version (recommended by p4a)
+android.ndk = 25b
+
+# Icons and presplash
 icon.filename = %(source.dir)s/icon.png
 presplash.filename = %(source.dir)s/presplash.png
 
 [buildozer]
-# (int) Log level (0 = error only, 1 = normal, 2 = debug)
+# Log level
 log_level = 2
 
-# (str) Path for the build output
+# Build output directory
 # build_dir = .buildozer
