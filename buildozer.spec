@@ -18,13 +18,13 @@ source.include_exts = py,kv,json,png,jpg
 version = 0.1
 
 # Application requirements (add any extra modules you use)
-requirements = python3,kivy,requests,sqlite3
+requirements = python3,kivy,requests,sqlite3,openssl
 
 # Orientation
 orientation = portrait
 
 # Permissions (uncomment if needed)
-# android.permissions = INTERNET
+android.permissions = INTERNET
 
 # Entry point (default is main.py)
 # entrypoint = main.py
@@ -37,6 +37,9 @@ android.api = 33
 
 # Minimum supported API
 android.minapi = 21
+
+android.bootstrap = sdl2
+
 
 # NDK version (recommended by p4a)
 android.ndk = 25b
